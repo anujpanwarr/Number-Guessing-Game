@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 720px;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .main_div {
+            height: 380px;
+            width: 400px;
+            background-color: rgb(138, 201, 193);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 100px;
+        }
+
+        .b_1, .b_2 {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        .b_2 {
+            background-color: #f44336;
+        }
+
+        p {
+            color: white;
+        }
+
+        .result, .previous, .remaining {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Number Guessing Game</h2>
+    <div class="main_div">
+        <p>Try and guess a random number between 1 to 100.</p>
+        <p>You have 10 attempts to guess the right number.</p>
+        <br>
+        <h1>Guess a number</h1>
+        <br>
+        <input type="number" class="text" placeholder="Enter number" min="1" max="100">
+        <div class="submit">
+            <button class="b_1">Submit Guess</button>
+            <button class="b_2">Start Again</button>
+        </div>
+        <p class="result"></p>
+        <p class="previous">Previous Guesses :</p>
+        <p class="remaining">Guesses Remaining: 10 </p>
+    </div>
+
+    <script>
+        // Initialize variables
+        let get_button = document.querySelector(".b_1");
+        let array = [];
+        let chance = 10;
+        let random = Math.random() * 100;  // Adjusted to generate random number between 1 and 100
+        let random_val = Math.floor(random) + 1;  // Adjusting range to 1-100
+        console.log(random_val); // For testing purposes
+
+        // Event listener for the "Submit Guess" button
+        get_button.addEventListener("click", () => {
+            let get_user = document.querySelector(".text");
+            let get_user_val = parseInt(get_user.value);
+            console.log(typeof get_user_val, get_user_val);  // Debugging
+
+            // Check if the input is a valid number
+            if (isNaN(get_user_val) || get_user_val < 1 || get_user_val > 100) {
+                console.log("Please enter a valid number between 1 and 100.");
+                return;
+            }
+
+            // Check if there are remaining attempts
+            if (array.length < 10 && chance > 0) {
+                array.push(get_user_val);
+                chance--;
+
+                // Check if the guess is correct
+                if (random_val === get_user_val) {
+                    console.log("You win!");
+                    result = document.querySelector(".result");
+                    result.innerHTML = `<p style="color: black;">You Win! You guessed the number in ${array.length} attempts.</p>`;
+                }
+
+            } else {
+                console.log("You lose!");
+                result = document.querySelector(".result");
+                result.innerHTML = `<p style="color: black;">You Lose! The correct number was ${random_val}.</p>`;
+            }
+
+            // Update previous guesses and remaining attempts
+            previous = document.querySelector(".previous");
+            previous.innerHTML = `<p>Previous Guesses: ${array.join(", ")}</p>`;
+            remain = document.querySelector(".remaining");
+            remain.innerHTML = `<p>Guesses Remaining: ${chance}</p>`;
+        });
+
+        // Event listener for the "Start Again" button
+        const refresh_button = document.querySelector(".b_2");
+        refresh_button.addEventListener("click", () => {
+            array = [];
+            chance = 10;
+            random = Math.random() * 100;
+            random_val = Math.floor(random) + 1;
+
+            // Reset the UI elements
+            document.querySelector(".text").value = "";
+            document.querySelector(".result").innerHTML = "";
+            document.querySelector(".previous").innerHTML = "<p>Previous Guesses: </p>";
+            document.querySelector(".remaining").innerHTML = "<p>Guesses Remaining: 10</p>";
+
+            console.log("Game has been reset. New random value is: " + random_val);
+        });
+    </script>
+
+</body>
+</html>
